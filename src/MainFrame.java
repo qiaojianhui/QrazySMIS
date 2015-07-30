@@ -1,26 +1,24 @@
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JButton;
-import javax.swing.JDesktopPane;
-import javax.swing.JFileChooser;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Vector;
 
-import javax.swing.JMenuBar;
+import javax.swing.JButton;
+import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-import javax.swing.JToolBar;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import java.io.File;
-import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 
 public class MainFrame extends JFrame {
 
@@ -93,6 +91,7 @@ public class MainFrame extends JFrame {
 		btnImpExcel.setToolTipText("打开Excel文件，显示表单内容并存入到数据库中");
 		btnImpExcel.addActionListener(new ActionListener() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setCursor(java.awt.Cursor.WAIT_CURSOR);
