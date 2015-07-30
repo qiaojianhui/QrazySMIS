@@ -5,7 +5,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class point {
+public class Starter {
 
 	public static void main(String[] args) {
 
