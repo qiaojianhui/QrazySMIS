@@ -52,8 +52,8 @@ public class TableDemo extends JPanel {
     private boolean DEBUG = false;
 
     public TableDemo() {
-        super(new GridLayout(1,0));
-
+        super(new GridLayout(1,0)); 
+		
         JTable table = new JTable(new MyTableModel());
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);

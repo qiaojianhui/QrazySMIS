@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
+import javax.swing.JProgressBar;
 
 public class ToolBarSample {
 
@@ -52,6 +53,11 @@ public class ToolBarSample {
 		JTextArea textArea = new JTextArea();
 		JScrollPane pane = new JScrollPane(textArea);
 		contentPane.add(pane, BorderLayout.CENTER);
+		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setValue(50);
+		progressBar.setStringPainted(true);
+		pane.setColumnHeaderView(progressBar);
 		frame.setSize(350, 150);
 		frame.setVisible(true);
 	};

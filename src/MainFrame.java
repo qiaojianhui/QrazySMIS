@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
@@ -27,9 +28,13 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 7018583495088202767L;
 	private final JPanel panelTable = new JPanel();
+	private static MainFrame instance;
+	private StatusBar statusBar;
 
-	public MainFrame(String title) {
+	private MainFrame(String title) {
+
 		setTitle(title);
+		java.net.URL imgURL;
 
 		JMenuBar menuBar = new JMenuBar();
 
@@ -79,7 +84,8 @@ public class MainFrame extends JFrame {
 		});
 		mnHelp.add(mnItemHelpHelp);
 
-		this.setJMenuBar(menuBar);
+		// this.setJMenuBar(menuBar);
+
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JToolBar toolBar = new JToolBar();
@@ -88,6 +94,10 @@ public class MainFrame extends JFrame {
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 
 		JButton btnImpExcel = new JButton("导入Excel");
+		imgURL = this.getClass().getResource("/images/excel.png");
+		if (imgURL != null) {
+			btnImpExcel.setIcon(new ImageIcon(imgURL.getFile()));
+		}
 		btnImpExcel.setToolTipText("打开Excel文件，显示表单内容并存入到数据库中");
 		btnImpExcel.addActionListener(new ActionListener() {
 
@@ -99,7 +109,7 @@ public class MainFrame extends JFrame {
 				// TODO Auto-generated method stub
 				Vector colum = new Vector();
 				Vector rows = new Vector();
-
+statusBar.setStatusInfo("准备导入excel文件数据……");
 				try {
 
 					PoiExcelHelper helper = new PoiXlsxHelper();
@@ -123,11 +133,12 @@ public class MainFrame extends JFrame {
 					String sql = "select count(*) from t_import_files where md5='" + md5 + "'";
 					java.sql.ResultSet rs = sqlHelper.excuteQuery(sql);
 					int r = rs.getInt(1);
-					if (r > 0){
-					   JOptionPane.showMessageDialog(null, "文件'"+file.getAbsolutePath()+"'中的数据已经导入过，不允许重复导入。");
+					if (r > 0) {
+						JOptionPane.showMessageDialog(null, "文件'" + file.getAbsolutePath() + "'中的数据已经导入过，不允许重复导入。");
+						statusBar.setStatusInfo("中止导入……");
 						return;
 					}
-					
+
 					if (file.getName().endsWith(".xls"))
 						helper = new PoiXlsHelper();
 
@@ -155,8 +166,12 @@ public class MainFrame extends JFrame {
 								+ curList.get(7) + "'," + curList.get(8) + "," + curList.get(9) + "," + curList.get(10)
 								+ ",'" + curList.get(11) + "')";
 						sqlHelper.executeUpdate(sql);
+						double i=dataList.indexOf(curList);
+					double p=i/dataList.size(); 
+						statusBar.setStatusInfo("正在导入excel数据……" ,100*(int)p);
+						repaint();
 					}
-
+ 
 					// 将md5值存入数据库
 					sql = "insert into T_IMPORT_FILES (FILENAME,FULLPATH,MD5,TIME) VALUES('" + file.getName() + "','"
 							+ file.getAbsolutePath() + "','" + md5 + "',datetime('now','localtime'))";
@@ -177,22 +192,29 @@ public class MainFrame extends JFrame {
 					e1.printStackTrace();
 				} finally {
 					setCursor(java.awt.Cursor.DEFAULT_CURSOR);
+					
+					statusBar.setStatusInfo("完成导入。",100);
+					
 				}
 			}
 		});
-		
+
 		JButton btnRefreshDB = new JButton("\u5237\u65B0\u6570\u636E");
 		btnRefreshDB.setToolTipText("刷新数据列表");
-		btnRefreshDB.addActionListener(new ActionListener() {			
+		imgURL = this.getClass().getResource("/images/refresh.png");
+		if (imgURL != null) {
+			btnRefreshDB.setIcon(new ImageIcon(imgURL.getFile()));
+		}
+
+		btnRefreshDB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-				String sql="SELECT no as 序号,BILLNO as 单据编号,BILLDATE as 单据日期,client as 往来单位,medicinename as 药品名称," +
-								 "MEDICINESCALE as 药品规格,MEDICINECERNO as 批号,MEDICINEVALIDITY as 有效期,SALESNUMBER as 销售数量," + 
-								 " SALESPRICE as 销售单价,SALESAMOUNT as 销售金额, EMPLOYEE as 经办人员 " +
-								 " FROM t_salesrecord_ee";
-		
-					JTable table = SQLiteHelper.getInstance("db").queryTable(sql); 
+					String sql = "SELECT no as 序号,BILLNO as 单据编号,BILLDATE as 单据日期,client as 往来单位,medicinename as 药品名称,"
+							+ "MEDICINESCALE as 药品规格,MEDICINECERNO as 批号,MEDICINEVALIDITY as 有效期,SALESNUMBER as 销售数量,"
+							+ " SALESPRICE as 销售单价,SALESAMOUNT as 销售金额, EMPLOYEE as 经办人员 " + " FROM t_salesrecord_ee";
+
+					JTable table = SQLiteHelper.getInstance("db").queryTable(sql);
 					panelTable.setLayout(new BorderLayout());
 					panelTable.add(table, BorderLayout.CENTER);
 					table.setVisible(true);
@@ -205,33 +227,54 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		toolBar.add(btnRefreshDB);
 		toolBar.add(btnImpExcel);
-		
+
 		JButton btnViewImpRec = new JButton("\u6587\u4EF6\u5BFC\u5165\u8BB0\u5F55");
+		imgURL = this.getClass().getResource("/images/records32.png");
+		if (imgURL != null) {
+			btnViewImpRec.setIcon(new ImageIcon(imgURL.getFile()));
+		}
+
 		btnViewImpRec.setToolTipText("查看导入过的历史数据文件，所有导入过的文件以列表形式展示出来");
 		btnViewImpRec.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JDesktopPane deskPane=new JDesktopPane( );
-				getContentPane().	add(deskPane);
-				
-//				javax.swing.JInternalFrame inf =new JInternalFrame("xxxxxxxxxxxx", true, true, true);
-				FrameViewImpRec frame = new FrameViewImpRec("文件导入列表");
-//				frame.setLocation( 20,20);
-//				frame.setSize(200,200); 
+				JDesktopPane deskPane = new JDesktopPane();
+				getContentPane().add(deskPane);
+
+				// javax.swing.JInternalFrame inf =new
+				// JInternalFrame("xxxxxxxxxxxx", true, true, true);
+				FrameViewImpRec frame = new FrameViewImpRec("文件导入列表", instance);
+				// frame.setLocation( 20,20);
+				// frame.setSize(200,200);
 				frame.setVisible(true);
 				deskPane.add(frame);
 				frame.setVisible(true);
- 
 			}
 		});
-		toolBar.add(btnViewImpRec);
+		// toolBar.add(btnViewImpRec);
 
 		toolBar.addSeparator();
 
 		getContentPane().add(panelTable, BorderLayout.CENTER);
+		statusBar = new StatusBar();
+ 
+		// 添加一个状态栏
+		getContentPane().add(statusBar, BorderLayout.SOUTH);
+	}
+
+	/**
+	 * 返回类的实例
+	 * 
+	 * @param title
+	 * @return
+	 */
+	public static MainFrame getInstance(String title) {
+		if (instance == null)
+			instance = new MainFrame(title);
+		return instance;
 	}
 }
