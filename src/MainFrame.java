@@ -17,6 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
@@ -28,6 +29,7 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 7018583495088202767L;
 	private final JPanel panelTable = new JPanel();
+	private JTabbedPane tabPane;
 	private static MainFrame instance;
 	private StatusBar statusBar;
 
@@ -93,6 +95,10 @@ public class MainFrame extends JFrame {
 		toolBar.setBounds(20, 60, 154, -30);
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 
+		tabPane=new JTabbedPane();
+		getContentPane().add(tabPane, BorderLayout.CENTER);
+		
+		
 		JButton btnImpExcel = new JButton("导入Excel");
 		imgURL = this.getClass().getResource("/images/excel.png");
 		if (imgURL != null) {
@@ -259,7 +265,13 @@ statusBar.setStatusInfo("准备导入excel文件数据……");
 
 		toolBar.addSeparator();
 
-		getContentPane().add(panelTable, BorderLayout.CENTER);
+		tabPane.addTab("销售记录",  panelTable );
+		tabPane.addTab("销售记录1",  new javax.swing.JLabel() );
+	for(int i=0;i<tabPane.getTabCount();i++){
+		tabPane.setTabComponentAt(i,
+	                 new ButtonTabComponent(tabPane));
+	}
+		
 		statusBar = new StatusBar();
  
 		// 添加一个状态栏
