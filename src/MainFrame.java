@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -21,6 +22,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class MainFrame extends JFrame {
 
@@ -38,55 +41,55 @@ public class MainFrame extends JFrame {
 		setTitle(title);
 		java.net.URL imgURL;
 
-		JMenuBar menuBar = new JMenuBar();
-
-		JMenu mnFile = new JMenu("File");
-		menuBar.add(mnFile);
-
-		JMenuItem mnOpen = new JMenuItem("Open");
-		mnOpen.setAccelerator(KeyStroke.getKeyStroke("control O"));
-		mnFile.add(mnOpen);
-
-		JMenuItem mnSave = new JMenuItem("Save");
-		mnSave.setAccelerator(KeyStroke.getKeyStroke("control S"));
-		mnFile.add(mnSave);
-		mnFile.addSeparator();
-		JMenuItem mnExit = new JMenuItem("Exit");
-		mnExit.setAccelerator(KeyStroke.getKeyStroke("control Q"));
-		mnFile.add(mnExit);
-
-		JMenu mnEdit = new JMenu("Edit");
-		menuBar.add(mnEdit);
-
-		JMenuItem menuItem = new JMenuItem("New menu item");
-		mnEdit.add(menuItem);
-
-		JMenu mnHelp = new JMenu("Help");
-		menuBar.add(mnHelp);
-
-		JMenuItem mnItemHelpAbout = new JMenuItem("关于");
-		mnItemHelpAbout.setAccelerator(KeyStroke.getKeyStroke("control A"));
-		mnHelp.add(mnItemHelpAbout);
-
-		JMenuItem mnItemHelpHelp = new JMenuItem("帮助");
-		mnItemHelpHelp.setAccelerator(KeyStroke.getKeyStroke("F1"));
-		// mnItemHelpHelp.addMouseListener(new MouseAdapter(){
-		// @Override
-		// public void mouseClicked(MouseEvent arg0) {
-		//// JOptionPane.showConfirmDialog(null, "测试帮助");
-		// JFileChooser f=new JFileChooser();
-		// f.showSaveDialog(null);
-		// }
-		// });
-		mnItemHelpHelp.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "测试帮助");
-			}
-		});
-		mnHelp.add(mnItemHelpHelp);
-
-		// this.setJMenuBar(menuBar);
+//		JMenuBar menuBar = new JMenuBar();
+//
+//		JMenu mnFile = new JMenu("File");
+//		menuBar.add(mnFile);
+//
+//		JMenuItem mnOpen = new JMenuItem("Open");
+//		mnOpen.setAccelerator(KeyStroke.getKeyStroke("control O"));
+//		mnFile.add(mnOpen);
+//
+//		JMenuItem mnSave = new JMenuItem("Save");
+//		mnSave.setAccelerator(KeyStroke.getKeyStroke("control S"));
+//		mnFile.add(mnSave);
+//		mnFile.addSeparator();
+//		JMenuItem mnExit = new JMenuItem("Exit");
+//		mnExit.setAccelerator(KeyStroke.getKeyStroke("control Q"));
+//		mnFile.add(mnExit);
+//
+//		JMenu mnEdit = new JMenu("Edit");
+//		menuBar.add(mnEdit);
+//
+//		JMenuItem menuItem = new JMenuItem("New menu item");
+//		mnEdit.add(menuItem);
+//
+//		JMenu mnHelp = new JMenu("Help");
+//		menuBar.add(mnHelp);
+//
+//		JMenuItem mnItemHelpAbout = new JMenuItem("关于");
+//		mnItemHelpAbout.setAccelerator(KeyStroke.getKeyStroke("control A"));
+//		mnHelp.add(mnItemHelpAbout);
+//
+//		JMenuItem mnItemHelpHelp = new JMenuItem("帮助");
+//		mnItemHelpHelp.setAccelerator(KeyStroke.getKeyStroke("F1"));
+//		// mnItemHelpHelp.addMouseListener(new MouseAdapter(){
+//		// @Override
+//		// public void mouseClicked(MouseEvent arg0) {
+//		//// JOptionPane.showConfirmDialog(null, "测试帮助");
+//		// JFileChooser f=new JFileChooser();
+//		// f.showSaveDialog(null);
+//		// }
+//		// });
+//		mnItemHelpHelp.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JOptionPane.showMessageDialog(null, "测试帮助");
+//			}
+//		});
+//		mnHelp.add(mnItemHelpHelp);
+//
+//		// this.setJMenuBar(menuBar);
 
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -96,6 +99,19 @@ public class MainFrame extends JFrame {
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 
 		tabPane=new JTabbedPane();
+//		tabPane.addChangeListener(new ChangeListener() {
+//			
+//			@Override
+//			public void stateChanged(ChangeEvent arg0) {
+//				
+//				// TODO Auto-generated method stub
+//				for(int i=0;i<tabPane.getTabCount();i++){
+//					tabPane.setTabComponentAt(i,
+//				                 new ButtonTabComponent(tabPane));
+//				}
+//			}
+//		});
+		
 		getContentPane().add(tabPane, BorderLayout.CENTER);
 		
 		
@@ -234,8 +250,7 @@ statusBar.setStatusInfo("准备导入excel文件数据……");
 			}
 		});
 
-		toolBar.add(btnRefreshDB);
-		toolBar.add(btnImpExcel);
+	
 
 		JButton btnViewImpRec = new JButton("\u6587\u4EF6\u5BFC\u5165\u8BB0\u5F55");
 		imgURL = this.getClass().getResource("/images/records32.png");
@@ -248,25 +263,56 @@ statusBar.setStatusInfo("准备导入excel文件数据……");
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JDesktopPane deskPane = new JDesktopPane();
-				getContentPane().add(deskPane);
+				try {
+//				JDesktopPane deskPane = new JDesktopPane();
+//				getContentPane().add(deskPane);
+//
+//				// javax.swing.JInternalFrame inf =new
+//				// JInternalFrame("xxxxxxxxxxxx", true, true, true);
+//				FrameViewImpRec frame = new FrameViewImpRec("文件导入列表", instance);
+//				// frame.setLocation( 20,20);
+//				// frame.setSize(200,200);
+//				frame.setVisible(true);
+//				deskPane.add(frame);
+//				frame.setVisible(true);
+				 JPanel panel = new JPanel();
+				 panel.setLayout(new BorderLayout());
+				String sql = "select id as 序号,filename as 文件名,fullpath as 路径,time as 导入时间 from t_import_files";
 
-				// javax.swing.JInternalFrame inf =new
-				// JInternalFrame("xxxxxxxxxxxx", true, true, true);
-				FrameViewImpRec frame = new FrameViewImpRec("文件导入列表", instance);
-				// frame.setLocation( 20,20);
-				// frame.setSize(200,200);
-				frame.setVisible(true);
-				deskPane.add(frame);
-				frame.setVisible(true);
+			JTable tableList;
+
+				tableList = SQLiteHelper.getInstance("db").queryTable(sql);
+
+
+//				panel.add(tableList, BorderLayout.CENTER);
+				tableList.setVisible(true);
+				// tableList.setRowHeight(50);
+				panel.add(new JScrollPane(tableList), BorderLayout.CENTER);
+				tableList.setFillsViewportHeight(true);
+				
+				tabPane.addTab("数据导入记录",panel);
+		 
+//				for(int i=0;i<tabPane.getTabCount();i++){
+					tabPane.setTabComponentAt(tabPane.getTabCount()-1,
+				                 new ButtonTabComponent(tabPane));
+//				}
+				
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
-		// toolBar.add(btnViewImpRec);
+		
+		// 将定义的工具按钮添加至工具栏
+		toolBar.add(btnRefreshDB); // 刷新数据
+		toolBar.add(btnImpExcel);		// 导入excel
+		 toolBar.add(btnViewImpRec); // 查看导入记录
 
 		toolBar.addSeparator();
 
 		tabPane.addTab("销售记录",  panelTable );
-		tabPane.addTab("销售记录1",  new javax.swing.JLabel() );
+//		tabPane.addTab("销售记录",  new javax.swing.JLabel() );
 	for(int i=0;i<tabPane.getTabCount();i++){
 		tabPane.setTabComponentAt(i,
 	                 new ButtonTabComponent(tabPane));

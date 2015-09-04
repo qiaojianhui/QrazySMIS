@@ -9,7 +9,7 @@ public class Starter {
 
 	public static void main(String[] args) {
  
-		MainFrame f =   MainFrame.getInstance("Jrame生成的窗体");
+		MainFrame f =   MainFrame.getInstance("简单销售统计工具");
 		f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		f.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent we) {
