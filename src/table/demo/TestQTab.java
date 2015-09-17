@@ -3,6 +3,8 @@ package table.demo;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import controls.QTabbedPane;
+
 public class TestQTab  extends JFrame{
 
 	/**

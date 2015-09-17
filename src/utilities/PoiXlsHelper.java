@@ -1,25 +1,31 @@
+package utilities;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 /**
- * Excel 读取（2007+新格式）
+ * Excel 读取（97-2003格式）
  * @author	chengesheng
  * @date	2012-4-27 下午03:39:01
- * @note	PoiExcel2k7Helper
+ * @note	PoiExcel2k3Helper
  */
-public class PoiXlsxHelper extends PoiExcelHelper {
+public class PoiXlsHelper extends PoiExcelHelper {
 	/** 获取sheet列表 */
 	public ArrayList<String> getSheetList(String filePath) {
 		ArrayList<String> sheetList = new ArrayList<String>(0);
 		try {
-			XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(filePath));
-			Iterator<XSSFSheet> iterator = wb.iterator();
-			while (iterator.hasNext()) {
-				sheetList.add(iterator.next().getSheetName());
+			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(filePath));
+			int i = 0;
+			while (true) {
+				try {
+					String name = wb.getSheetName(i);
+					sheetList.add(name);
+					i++;
+				} catch (Exception e) {
+					break;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -31,8 +37,8 @@ public class PoiXlsxHelper extends PoiExcelHelper {
 	public ArrayList<ArrayList<String>> readExcel(String filePath, int sheetIndex, String rows, String columns) {
 		ArrayList<ArrayList<String>> dataList = new ArrayList<ArrayList<String>> ();
 		try {
-			XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(filePath));
-			XSSFSheet sheet = wb.getSheetAt(sheetIndex);
+			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(filePath));
+			HSSFSheet sheet = wb.getSheetAt(sheetIndex);
 			
 			dataList = readExcel(sheet, rows, getColumnNumber(sheet, columns));
 		} catch (Exception e) {
@@ -45,8 +51,8 @@ public class PoiXlsxHelper extends PoiExcelHelper {
 	public ArrayList<ArrayList<String>> readExcel(String filePath, int sheetIndex, String rows, int[] cols) {
 		ArrayList<ArrayList<String>> dataList = new ArrayList<ArrayList<String>> ();
 		try {
-			XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(filePath));
-			XSSFSheet sheet = wb.getSheetAt(sheetIndex);
+			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(filePath));
+			HSSFSheet sheet = wb.getSheetAt(sheetIndex);
 			
 			dataList = readExcel(sheet, rows, cols);
 		} catch (Exception e) {

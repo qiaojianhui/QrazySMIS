@@ -1,3 +1,4 @@
+package utilities;
 import javax.swing.table.AbstractTableModel;
 
 public class QTableModel extends AbstractTableModel {

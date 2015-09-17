@@ -1,4 +1,4 @@
-package table.demo;
+package controls;
 
 import java.awt.Component;
 import java.awt.Dimension;
